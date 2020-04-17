@@ -18,7 +18,6 @@ you set the following two variables to your personal credentials.
 The libraries used are:
 pandas: A data analysis and manipulation tool for python. 
 	    More info at: https://pandas.pydata.org/
-unittest: A Python library for managing test cases.
 sqlite3: A lightweight database utility
 gspread: The API library for accessing Google Sheets
 oauth2: Google's implementation of the OAuth2.0 authentication framework
@@ -27,7 +26,6 @@ google.auth: Google's authentication library
 
 # Libraries
 import pandas as pd
-import unittest
 import sqlite3
 import gspread
 from google.oauth2 import service_account
@@ -71,25 +69,6 @@ df.columns = df.columns.str.strip().str.lower().str.replace(' ', '_')
 if verbose_mode:
 	print("New column names:")
 	print(df.head())
-
-# Test the dataframe to make sure it contains correct values in some known
-# positions. We want to catch errors before we export to a sqlite database.
-class TestDataframe(unittest.TestCase):
-	
-	def test_some_column_names(self):
-		self.assertEqual(df.columns.values.tolist()[0], "serial_number")
-		self.assertEqual(df.columns.values.tolist()[31], "d_stddev_ol")
-
-	def test_some_first_data_row_values(self):
-		self.assertEqual(df.at[0,"serial_number"], "4A001H")
-		self.assertEqual(df.at[0, "p_cl_2"], "29,335.58")
-
-	def test_some_final_data_row_values(self):
-		self.assertEqual(df.at[449, "serial_number"], "3C005V")
-		self.assertEqual(df.at[449, "d_stddev_ol"], 0)
-		
-# Run the unittests
-unittest.main(argv=[''], verbosity=1, exit=False)
 
 # Create a sqlite database named after the Google Sheet.
 database_name = sheet.title + ".db"
